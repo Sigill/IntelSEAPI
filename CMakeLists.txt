@@ -23,6 +23,9 @@ set(CMAKE_MACOSX_RPATH 1)
 OPTION(JDK "Enable Java build")
 OPTION(CO_PILOT "Enable co-pilot build")
 OPTION(FORCE_32 "Force a 32bit compile on 64bit" OFF)
+OPTION(LINK_RT "Link to librt to fix 'undefined reference to clock_gettime' on systems with glibc < 2.17" OFF)
+OPTION(BUILD_DOC "Build documentation" OFF)
+
 
 if (ANDROID_ARCH_NAME MATCHES "arm\\.*")
     set(ARM 1)
@@ -162,15 +165,17 @@ target_include_directories(IntelSEAPI
 )
 
 # add a target to generate API documentation with Doxygen
-find_package(Doxygen)
-if(DOXYGEN_FOUND)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-    add_custom_target(doc ALL
-        ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Generating API documentation with Doxygen" VERBATIM
-    )
-endif(DOXYGEN_FOUND)
+if(BUILD_DOC)
+    find_package(Doxygen)
+    if(DOXYGEN_FOUND)
+        configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+        add_custom_target(doc ALL
+            ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            COMMENT "Generating API documentation with Doxygen" VERBATIM
+        )
+    endif()
+endif()
 
 ################################################### INSTALLER #########################################################
 

@@ -191,6 +191,9 @@ elseif (ANDROID)
 else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -g -fPIC -pthread")
     TARGET_LINK_LIBRARIES(sea_itt_lib dl)
+    if (LINK_RT)
+        TARGET_LINK_LIBRARIES(sea_itt_lib rt)
+    endif()
 endif()
 
 target_include_directories(sea_itt_lib PUBLIC
