@@ -204,3 +204,8 @@ target_include_directories(sea_itt_lib PUBLIC
 
 TARGET_LINK_LIBRARIES(sea_itt_lib ittnotify ${LINK_LIBS})
 
+install(
+    TARGETS sea_itt_lib
+    LIBRARY DESTINATION bin
+)
+

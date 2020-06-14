@@ -52,3 +52,10 @@ SET_TARGET_PROPERTIES(ittnotify PROPERTIES LINKER_LANGUAGE C)
 target_include_directories(ittnotify
     PUBLIC include src/ittnotify
 )
+
+install(
+    TARGETS ittnotify
+    ARCHIVE DESTINATION lib
+    PUBLIC_HEADER DESTINATION include
+)
+

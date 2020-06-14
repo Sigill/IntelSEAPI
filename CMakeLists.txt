@@ -68,20 +68,6 @@ foreach (Flag ${Flags})
     message(STATUS "${Flag} = ${${Flag}}")
 endforeach()
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../../bin)
-
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-set(LIBRARY_OUTPUT_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-set(ARCHIVE_OUTPUT_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-
-foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
-    string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
-    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG}     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} )
-    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG}     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} )
-    set( CMAKE_EXECUTABLE_OUTPUT_DIRECTORY_${OUTPUTCONFIG}  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} )
-    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG}     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} )
-endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
-
 add_executable(IntelSEAPI
     main.cpp
     memory.cpp
@@ -147,6 +133,11 @@ else()
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pie -Wl,--no-undefined -z noexecstack -z relro -z now")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fPIE -pie -Wl,--no-undefined -z noexecstack -z relro -z now")
 endif()
+
+install(
+    TARGETS IntelSEAPI
+    RUNTIME DESTINATION bin
+)
 
 add_subdirectory(ittnotify)
 add_subdirectory(sea_itt_lib)
@@ -266,13 +257,6 @@ else()
 
     set(CPACK_BUNDLE_NAME "IntelSEAPI")
     set(CPACK_GENERATOR STGZ)
-    install(
-        DIRECTORY "${SEA_PROJECT_BIN}"
-        DESTINATION .
-        PATTERN "*.a" EXCLUDE
-    )
-
-    InstallWildCard("${SEA_PROJECT_BIN}/*ittnotify*.a" "lib")
 
     if(APPLE)
         install(
