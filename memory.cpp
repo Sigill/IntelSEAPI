@@ -251,15 +251,6 @@
             void (*g_origFree) (void *__ptr, const void *) = nullptr;
             void *(*g_origMalloc)(size_t __size, const void *) = nullptr;
 
-            void InitHooks()
-            {
-                g_origMalloc = __malloc_hook;
-                g_origFree = __free_hook;
-                __malloc_hook = MallocHook;
-                __free_hook = FreeHook;
-            }
-            void (* volatile __malloc_initialize_hook)() = InitHooks;
-
             void* MallocHook(size_t size, const void * context)
             {
                 if (pthread_getspecific(tls_key) || HasSEAInStack())
@@ -283,6 +274,15 @@
                 g_origFree(ptr, context);
                 __itt_heap_free_end(g_heap, ptr);
             }
+
+            void InitHooks()
+            {
+                g_origMalloc = __malloc_hook;
+                g_origFree = __free_hook;
+                __malloc_hook = MallocHook;
+                __free_hook = FreeHook;
+            }
+            void (* __malloc_initialize_hook)(void) = InitHooks;
         #endif
 
      #endif
