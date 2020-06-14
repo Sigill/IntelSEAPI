@@ -91,7 +91,7 @@ public:
         static struct timespec res = {};
         if (!res.tv_nsec && !res.tv_sec)
         {
-            clock_getres(CLOCK_MONOTONIC_RAW, &res);
+            clock_getres(CLOCK_MONOTONIC, &res);
             if (!res.tv_nsec && !res.tv_sec)
             {
                 VerbosePrint("Can't get CLOCK_MONOTONIC_RAW\n");
@@ -99,7 +99,7 @@ public:
             }
         }
         struct timespec ts = {};
-        clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
+        clock_gettime(CLOCK_MONOTONIC, &ts);
         return uint64_t((1000000000. * ts.tv_sec + ts.tv_nsec) / (1000000000. * res.tv_sec + res.tv_nsec));
 #else // FIXME: use mach_absolute_time for APPLE
         using namespace std::chrono;
