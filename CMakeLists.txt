@@ -1,4 +1,4 @@
-﻿#   Intel® Single Event API
+#   Intel® Single Event API
 #
 #   This file is provided under the BSD 3-Clause license.
 #   Copyright (c) 2015, Intel Corporation
